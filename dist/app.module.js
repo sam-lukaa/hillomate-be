@@ -23,7 +23,7 @@ exports.AppModule = AppModule = __decorate([
             room_module_1.RoomModule,
             post_module_1.PostModule,
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            mongoose_1.MongooseModule.forRoot(process.env.MONGO_URI),
+            mongoose_1.MongooseModule.forRoot(`${process.env.MONGO_URI}`),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

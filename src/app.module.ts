@@ -11,7 +11,7 @@ import { RoomModule } from './room/room.module';
     RoomModule,
     PostModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(`${process.env.MONGO_URI}`),
   ],
   controllers: [AppController],
   providers: [AppService],
