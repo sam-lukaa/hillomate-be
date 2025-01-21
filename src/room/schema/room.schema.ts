@@ -18,6 +18,11 @@ export class Room {
   createdAt: Date;
 
   @Prop({
+    default: () => new Date(Date.now() + 30 * 60 * 1000),
+  })
+  expiryTime: Date;
+
+  @Prop({
     type: [
       {
         userId: { type: String, required: true },

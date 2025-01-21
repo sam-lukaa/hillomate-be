@@ -86,13 +86,11 @@ export class RoomService {
   }
 
   /**
-   * Joins an existing room by verifying its password if required.
-   * New participants are assigned the "participant" role.
-   *
+   * Joins an existing room if the session has not expired (30-minute limit).
    * @param roomId - Unique identifier of the room.
    * @param password - Optional password for the room.
-   * @returns The room document and the generated userId.
-   * @throws HttpException if the room is not found or the password is invalid.
+   * @returns The room document and the generated userId if within time limit.
+   * @throws HttpException if the room is not found or expired.
    */
   async joinRoom(
     roomId: string,
@@ -104,6 +102,10 @@ export class RoomService {
       throw new HttpException('Room not found', HttpStatus.NOT_FOUND);
     }
 
+    if (new Date(room.expiryTime) < new Date()) {
+      throw new HttpException('Room session expired', HttpStatus.GONE);
+    }
+
     if (room.password && password) {
       const isPasswordValid = await bcrypt.compare(password, room.password);
 
@@ -113,7 +115,6 @@ export class RoomService {
     }
 
     const userId = this.generateUserId();
-
     const token = this.generateAgoraToken(roomId, userId, 'participant');
 
     if (!room.members.find((member) => member.userId === userId)) {
@@ -122,7 +123,6 @@ export class RoomService {
     }
 
     const { password: _, ...roomWithoutPassword } = room.toObject();
-
     return { room: roomWithoutPassword, userId, token };
   }
 

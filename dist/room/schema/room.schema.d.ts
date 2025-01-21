@@ -5,6 +5,7 @@ export declare class Room {
     roomName: string;
     password?: string;
     createdAt: Date;
+    expiryTime: Date;
     members: {
         userId: string;
         role: 'admin' | 'participant';

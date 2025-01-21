@@ -54,6 +54,9 @@ let RoomService = class RoomService {
         if (!room) {
             throw new common_1.HttpException('Room not found', common_1.HttpStatus.NOT_FOUND);
         }
+        if (new Date(room.expiryTime) < new Date()) {
+            throw new common_1.HttpException('Room session expired', common_1.HttpStatus.GONE);
+        }
         if (room.password && password) {
             const isPasswordValid = await bcrypt.compare(password, room.password);
             if (!isPasswordValid) {
