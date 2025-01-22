@@ -32,7 +32,7 @@ __decorate([
 ], Room.prototype, "createdAt", void 0);
 __decorate([
     (0, mongoose_1.Prop)({
-        default: () => new Date(Date.now() + 5 * 60 * 1000),
+        default: () => new Date(Date.now() + 30 * 60 * 1000),
     }),
     __metadata("design:type", Date)
 ], Room.prototype, "expiryTime", void 0);
