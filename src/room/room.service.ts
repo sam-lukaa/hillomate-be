@@ -106,15 +106,21 @@ export class RoomService {
       throw new HttpException('Room session expired', HttpStatus.GONE);
     }
 
-    if (room.password && password) {
+    if (room.password) {
+      if (!password) {
+        throw new HttpException(
+          'Password is required',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
       const isPasswordValid = await bcrypt.compare(password, room.password);
-
       if (!isPasswordValid) {
         throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
       }
     }
 
     const userId = this.generateUserId();
+
     const token = this.generateAgoraToken(roomId, userId, 'participant');
 
     if (!room.members.find((member) => member.userId === userId)) {
